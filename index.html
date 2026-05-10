@@ -1,0 +1,14 @@
+// Client-side: Sending an image as a Base64 string
+const file = event.target.files[0];
+const reader = new FileReader();
+reader.onload = function(e) {
+  socket.emit('send-image', { image: e.target.result });
+};
+reader.readAsDataURL(file);
+
+// Server-side: Broadcasting the image to other users
+io.on('connection', (socket) => {
+  socket.on('send-image', (data) => {
+    io.emit('receive-image', data); // Sends to everyone
+  });
+});
