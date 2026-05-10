@@ -1,14 +1,29 @@
-// Client-side: Sending an image as a Base64 string
-const file = event.target.files[0];
-const reader = new FileReader();
-reader.onload = function(e) {
-  socket.emit('send-image', { image: e.target.result });
-};
-reader.readAsDataURL(file);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Photo Chat</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS for styling -->
+</head>
+<body>
+    <div id="chat-container">
+        <ul id="messages"></ul> <!-- Where chat messages and pictures appear -->
+        
+        <form id="form" action="">
+            <!-- Text input for standard messages -->
+            <input id="input" autocomplete="off" placeholder="Type a message..." />
+            
+            <!-- File input specifically for images -->
+            <label for="image-input" class="custom-file-upload">📷</label>
+            <input type="file" id="image-input" accept="image/*" style="display:none;">
+            
+            <button>Send</button>
+        </form>
+    </div>
 
-// Server-side: Broadcasting the image to other users
-io.on('connection', (socket) => {
-  socket.on('send-image', (data) => {
-    io.emit('receive-image', data); // Sends to everyone
-  });
-});
+    <!-- Socket.io client library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script> <!-- Link to your JavaScript logic -->
+</body>
+</html>
